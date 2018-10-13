@@ -31,6 +31,18 @@ function findNearest(v) {
 	return keys[0];
 }
 
+function findFurthest(v) {
+	let keys = Object.keys(vectors);
+	
+	keys.sort((a, b) => {
+		let d1 = distance(v, vectors[a]);
+		let d2 = distance(v, vectors[b]);
+		return d2 - d1;
+	});
+	//console.log(keys);
+	return keys[0];
+}
+
 function distance(d1, d2) {
 	return p5.Vector.dist(d1, d2);
 }
@@ -42,10 +54,10 @@ function setup() {
 	console.log(vectors);
 
 	// starting position for the walker
-	pos = createVector(random(255), random(255), random(255));
-	
-	findNearest(pos);
-	frameRate(7);
+	//pos = createVector(random(255), random(255), random(255));
+	pos = createVector(0, 255, 20);
+	//findNearest(pos);
+	frameRate(30);
 	// console.log('Hey Color vectors');
 	// console.log(data)
 }
@@ -53,14 +65,20 @@ function setup() {
 function draw() {
 
 	// random walk
-	let colorName = findNearest(pos);
-	let div = createDiv(colorName);
-	let v = vectors[colorName];
-	//div.style('background-color', `rgb(${v.x}, ${v.y}, ${v.z})`);
-	div.style('color', `rgb(${v.x}, ${v.y}, ${v.z})`);
+	let nearestColorName = findNearest(pos);
+	let furthestColorName = findFurthest(pos);
+
+	let div = createDiv(nearestColorName);
+	let nv = vectors[nearestColorName];
+	let fv = vectors[furthestColorName];
+
+	div.style('color', `rgb(${nv.x}, ${nv.y}, ${nv.z})`);
+
+	div.style('background-color', `rgb(${255-nv.x}, ${255-nv.y}, ${255-nv.z})`);
+	
 
 	let r = p5.Vector.random3D();
-	r.mult(60);
+	r.mult(80);
 	pos.add(r);
 	pos.x = constrain(pos.x, 0, 255);
 	pos.y = constrain(pos.x, 0, 255);
