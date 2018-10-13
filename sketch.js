@@ -40,21 +40,33 @@ function setup() {
 	noCanvas();
 	vectors = processData();
 	console.log(vectors);
+
+	// starting position for the walker
 	pos = createVector(random(255), random(255), random(255));
 	
 	findNearest(pos);
-	frameRate(3);
+	frameRate(7);
 	// console.log('Hey Color vectors');
 	// console.log(data)
 }
 
 function draw() {
 
+	// random walk
 	let colorName = findNearest(pos);
-	createDiv(colorName);
+	let div = createDiv(colorName);
+	let v = vectors[colorName];
+	//div.style('background-color', `rgb(${v.x}, ${v.y}, ${v.z})`);
+	div.style('color', `rgb(${v.x}, ${v.y}, ${v.z})`);
+
 	let r = p5.Vector.random3D();
 	r.mult(60);
 	pos.add(r);
+	pos.x = constrain(pos.x, 0, 255);
+	pos.y = constrain(pos.x, 0, 255);
+	pos.z = constrain(pos.x, 0, 255);
+
+
 
 
 }
